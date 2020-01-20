@@ -1,6 +1,7 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = "Viesis"
+var laiks = new Date();
 
 
 /*
@@ -52,9 +53,10 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja) {
+  constructor(vards, zinja, sutisanasLaiks) {
     this.vards = vards;
     this.zinja = zinja;
+    this.sutisanasLaiks = laiks.getHours() + ":" + laiks.getMinutes();
   }
 
   formateRindu() {
@@ -65,7 +67,7 @@ class Zinja {
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
-    let teksts = this.vards + ": " + this.zinja;
+    let teksts = this.vards + ": " + this.zinja + " nosūtīts " + this.sutisanasLaiks;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
     newDiv.appendChild(newContent); 
@@ -150,6 +152,9 @@ function saprotiKomandu(teksts) {
     default:
       zinja = paradiPalidzibu();
       break;
+    case "/dzest":
+      zinja = dzestZinju();
+      break;
   }
   return zinja;
 }
@@ -167,6 +172,9 @@ function paradiPalidzibu() {
   return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
 }
 
+function dzestZinju() {
+
+}
 
 // Ērtības funkcionalitāte
 var versijasLauks = document.getElementById("versija");

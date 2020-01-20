@@ -1,1 +1,6 @@
 {"vards": "Serveris", "zinja": "Sākam jaunu, skaistu dzīvi!"}
+{"vards": "Viesis", "zinja": "es"}
+{"vards": "Viesis", "zinja": "Ieva"}
+{"vards": "Viesis", "zinja": "nu"}
+{"vards": "Viesis", "zinja": "tad nu b\u016bs"}
+{"vards": "Viesis", "zinja": "un tagad?"}
