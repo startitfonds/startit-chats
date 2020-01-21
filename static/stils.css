@@ -116,3 +116,13 @@ a:hover, a:active, a:focus {
   text-align: right;
   color: grey;
 }
+
+.chat li.left .chat-body.user {
+  background: rgb(168, 168, 168);
+  border: 1px solid  rgb(168, 168, 168);
+}
+
+.chat li.left .chat-body.user::before {
+  background: rgb(168, 168, 168);
+  border: 1px solid  rgb(168, 168, 168);
+}

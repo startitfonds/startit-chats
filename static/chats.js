@@ -60,9 +60,9 @@ class Zinja {
   }
 
   formateRindu() {
+    this.vards = getCookie('name')
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
-    
     let newLI = document.createElement("li");
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
@@ -159,14 +159,10 @@ function saprotiKomandu(teksts) {
   return zinja;
 }
 
-
 function uzstadiVaardu(jaunaisVards) {
-  let vecaisVards = vards;
-  vards = jaunaisVards;
-  let teksts = vecaisVards + " kļuva par " + vards;
-  return teksts;
+  setCookie('name', jaunaisVards, 90)
+  return vards + ' kļuva par: ' + jaunaisVards
 }
-
 
 function paradiPalidzibu() {
   return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
