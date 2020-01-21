@@ -1,2 +1,0 @@
-{"vards": "Serveris", "zinja": "Sākam jaunu, skaistu dzīvi!"}
-{"vards": "Viesis", "zinja": "Pieejam\u0101s komandas : \"/vards JaunaisVards\", \"/palidziba\", \"/versija\""}
