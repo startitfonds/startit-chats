@@ -1,7 +1,6 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = "Viesis"
-var laiks = new Date();
 
 
 /*
@@ -53,10 +52,10 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja, sutisanasLaiks) {
+  constructor(vards, zinja) {
     this.vards = vards;
     this.zinja = zinja;
-    this.sutisanasLaiks = laiks.getHours() + ":" + laiks.getMinutes();
+    this.laiks = "nemāku pielikt";
   }
 
   formateRindu() {
@@ -67,7 +66,7 @@ class Zinja {
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
-    let teksts = this.vards + ": " + this.zinja + " nosūtīts " + this.sutisanasLaiks;
+    let teksts = this.vards + ": " + this.zinja + " : " + this.laiks;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
     newDiv.appendChild(newContent); 
