@@ -1,12 +1,9 @@
 {"vards": "Serveris", "zinja": "Sākam jaunu, skaistu dzīvi!"}
 {"vards": "Viesis", "zinja": "Pieejam\u0101s komandas : \"/vards JaunaisVards\", \"/palidziba\", \"/versija\""}
-{"vards": "Sergejs", "zinja": "Viesis k\u013cuva par Sergejs"}
-{"vards": "Sergejs", "zinja": "jiaogia"}
-{"vards": "Sergejs", "zinja": "gwaojpge"}
-{"vards": "asihfqpwiohfi", "zinja": "Viesis k\u013cuva par asihfqpwiohfi"}
-{"vards": "asihfqpwiohfi", "zinja": "oasdgopja]ewg"}
-{"vards": "Sergejs", "zinja": "Viesis k\u013cuva par Sergejs"}
-{"vards": "sss", "zinja": "Viesis k\u013cuva par sss"}
-{"vards": "janis", "zinja": "Viesis k\u013cuva par janis"}
-{"vards": "sergejs", "zinja": "janis k\u013cuva par sergejs"}
-{"vards": "Sergejs", "zinja": "sergejs k\u013cuva par Sergejs"}
+{"vards": "Viesis", "zinja": "Viesis k\u013cuva par: aaa"}
+{"vards": "Viesis", "zinja": "ddd"}
+{"vards": "Viesis", "zinja": "he"}
+{"vards": "Viesis", "zinja": "hey"}
+{"vards": "Viesis", "zinja": "Pieejam\u0101s komandas : \"/vards JaunaisVards\", \"/palidziba\", \"/versija\""}
+{"vards": "Viesis", "zinja": "Viesis k\u013cuva par: EsEsmuJauns"}
+{"vards": "Viesis", "zinja": "test"}

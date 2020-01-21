@@ -58,12 +58,9 @@ class Zinja {
   }
 
   formateRindu() {
-    let user = "";
-    if (this.vards == getCookie('name')){
-      user="user";
-    }
-    const LIclassName = "left " + user + " clearfix";
-    const newDivclassName = "chat-body " + user + " clearfix";
+    this.vards = getCookie('name')
+    const LIclassName = "left clearfix";
+    const newDivclassName = "chat-body clearfix";
     let newLI = document.createElement("li");
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
@@ -157,36 +154,10 @@ function saprotiKomandu(teksts) {
   return zinja;
 }
 
-
 function uzstadiVaardu(jaunaisVards) {
-  //eraseCookie(vecaisVards);
-  let vecaisVards = vards;
-  vards = jaunaisVards;
-  setCookie('name',jaunaisVards, 90);
-  let teksts = vecaisVards + " kļuva par " + vards;
-  return teksts;
+  setCookie('name', jaunaisVards, 90)
+  return vards + ' kļuva par: ' + jaunaisVards
 }
-
-function setCookie(cookieName, cookieValue, expirationDays){
-  let date = new Date();
-  date.setTime(date.getTime() + (expirationDays*24*60*60*1000))
-  const expires = 'expires='+ date.toUTCString()
-  document.cookie = cookieName + '=' + cookieValue + ';' + expires + ';path=/'
-}
-
-function getCookie(cookieName){
-  const name = cookieName + '='
-  const decodedCookie = decodeURIComponent(document.cookie)
-  const cookieArray = decodedCookie.split(';')
-  for(let i = 0; i < cookieArray.length; i++) {
-      let c = cookieArray[i]
-      while (c.charAt(0) == ' ') c = c.substring(1)
-      if (c.indexOf(name) == 0) return c.substring(name.length, c.length)
-  }
-  return ''
-}
-
-
 
 function paradiPalidzibu() {
   return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
