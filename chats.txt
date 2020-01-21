@@ -1,9 +1,2 @@
 {"vards": "Serveris", "zinja": "Sākam jaunu, skaistu dzīvi!"}
 {"vards": "Viesis", "zinja": "Pieejam\u0101s komandas : \"/vards JaunaisVards\", \"/palidziba\", \"/versija\""}
-{"vards": "Viesis", "zinja": "Viesis k\u013cuva par: aaa"}
-{"vards": "Viesis", "zinja": "ddd"}
-{"vards": "Viesis", "zinja": "he"}
-{"vards": "Viesis", "zinja": "hey"}
-{"vards": "Viesis", "zinja": "Pieejam\u0101s komandas : \"/vards JaunaisVards\", \"/palidziba\", \"/versija\""}
-{"vards": "Viesis", "zinja": "Viesis k\u013cuva par: EsEsmuJauns"}
-{"vards": "Viesis", "zinja": "test"}
