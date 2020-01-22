@@ -1,6 +1,6 @@
 # Čata adrese
 
-[Čats brivo-sunu-plapas](http://vauvau.herokuapp.com/)
+[vauvau čats](http://vauvau.herokuapp.com/)
 
 # Par projektu
 
