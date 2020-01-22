@@ -1,3 +1,5 @@
+http://brivo-sunu-plapas.herokuapp.com/
+
 # Par projektu
 
 StartIT skolotāju kursu chata projekts kā piemērs klienta/servera programmai.
