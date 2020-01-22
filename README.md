@@ -50,3 +50,4 @@ Ir aplūkojama [prezentācija](https://gitpitch.com/startitfonds/startit-chats)
 - [ ] Limitēt ziņas garumu uz 280 simboliem
 - [ ] limitēt *Viesu* sūtito ziņu biežumu
 - [ ] skaņas efekts pie jaunas ziņas
+
