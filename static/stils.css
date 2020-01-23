@@ -117,12 +117,12 @@ a:hover, a:active, a:focus {
   color: grey;
 }
 
-.chat li.left .chat-body.user {
+.chat li.left .chat-body {
   background: rgb(168, 168, 168);
   border: 1px solid  rgb(168, 168, 168);
 }
 
-.chat li.left .chat-body.user::before {
+.chat li.left .chat-body::before {
   background: rgb(168, 168, 168);
   border: 1px solid  rgb(168, 168, 168);
 }
