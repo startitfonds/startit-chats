@@ -153,9 +153,6 @@ function saprotiKomandu(teksts) {
     default:
       zinja = paradiPalidzibu();
       break;
-    case "/dzest":
-      zinja = dzestZinju();
-      break;
   }
   return zinja;
 }
@@ -169,9 +166,6 @@ function paradiPalidzibu() {
   return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
 }
 
-function dzestZinju() {
-
-}
 
 // Ērtības funkcionalitāte
 var versijasLauks = document.getElementById("versija");
