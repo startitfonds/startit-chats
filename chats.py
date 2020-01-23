@@ -1,6 +1,5 @@
 from flask import json, jsonify
 from datetime import datetime
-import time
 
 LOGFAILS = "chats.txt"
 
