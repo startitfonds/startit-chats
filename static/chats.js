@@ -67,7 +67,7 @@ class Zinja {
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
-    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${this.laiks}`;
+    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
     newDiv.appendChild(newContent); 
