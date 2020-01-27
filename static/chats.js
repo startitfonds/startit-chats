@@ -1,6 +1,6 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
-var vards = "Viesis"
+var vards = getCookie('name') || "Viesis"
 
 
 /*
@@ -59,7 +59,6 @@ class Zinja {
   }
 
   formateRindu() {
-    this.vards = getCookie('name')
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
@@ -157,8 +156,10 @@ function saprotiKomandu(teksts) {
 }
 
 function uzstadiVaardu(jaunaisVards) {
+  const vecaisVards = vards
   setCookie('name', jaunaisVards, 90)
-  return vards + ' kļuva par: ' + jaunaisVards
+  vards = jaunaisVards
+  return `${vecaisVards} kļuva par ${vards}`
 }
 
 function paradiPalidzibu() {
