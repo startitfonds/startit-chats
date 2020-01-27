@@ -59,7 +59,7 @@ class Zinja {
   }
 
   formateRindu() {
-    this.vards = getCookie('name')
+    // this.vards = getCookie('name')
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
@@ -157,8 +157,10 @@ function saprotiKomandu(teksts) {
 }
 
 function uzstadiVaardu(jaunaisVards) {
+  let vecaisV = vards
   setCookie('name', jaunaisVards, 90)
-  return vards + ' kļuva par: ' + jaunaisVards
+  vards = getCookie('name')
+  return vecaisV + ' kļuva par: ' + vards
 }
 
 function paradiPalidzibu() {
