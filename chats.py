@@ -4,11 +4,14 @@ from flask import json, jsonify
 LOGFAILS = "chats.txt"
 
 
-def lasi():
+def lasi(adresats):
     chata_rindas = []
     with open(LOGFAILS, "r", encoding="utf-8") as f:
         for rinda in f:
-            chata_rindas.append(json.loads(rinda))
+            r = json.loads(rinda)
+            if r["adresats"] == adresats or r["adresats"] == "visi" or r["vards"] == adresats:
+                chata_rindas.append(r)
+            
     return jsonify({"chats": chata_rindas})
 
 

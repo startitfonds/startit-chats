@@ -33,9 +33,9 @@ ul.chat {
   padding-inline-start: 5px;
 }
 
-.chat li.left .chat-body {
+/* .chat li.left .chat-body {
   background-color: #fff;
-}
+} */
 
 .chat li .chat-body {
   position: relative;
@@ -115,4 +115,9 @@ a:hover, a:active, a:focus {
 #versija {
   text-align: right;
   color: grey;
+}
+
+.privata-zinja {
+  background-color: aqua;
+  color: red;
 }
