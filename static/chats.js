@@ -59,10 +59,15 @@ class Zinja {
   }
 
   formateRindu() {
+    let a = ''
+    if (this.vards == vards){
+      a = 'user'
+    }
+
     const laiks = this.laiks ? this.laiks : '-';
-    const LIclassName = "left clearfix";
-    const newDivclassName = "chat-body clearfix";
-    let newLI = document.createElement("li");
+    const LIclassName = `left ${a} clearfix`;
+    const newDivclassName = `chat-body ${a} clearfix`;
+    let newLI = document.createElement(`li`);
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
@@ -126,12 +131,14 @@ async function suutiZinju() {
     }
 }
 
-
 function saprotiKomandu(teksts) {
   let vardi = teksts.split(" ");
   let komanda = vardi[0];
   let zinja;
   switch (komanda) {
+    case "/chuck":
+      zinja = getChuckJoke();
+      break;
     case "/vards":
     case "/vaards":
       if (vardi.length < 2) {
@@ -163,7 +170,7 @@ function uzstadiVaardu(jaunaisVards) {
 }
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", /chuck'
 }
 
 
