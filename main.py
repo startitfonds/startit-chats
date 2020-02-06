@@ -20,6 +20,16 @@ def suutiit_zinju():
   dati = request.json
   chats.pieraksti_zinju(dati)
   return chats.lasi()
+  
+@app.route('/chats/get_mood')
+def sanjemt_zinju():
+  return chats.lasi_mood()
+
+@app.route('/chats/set_mood', methods=['POST'])
+def suutiit_garastavokli():
+  dati = request.json
+  chats.pieraksti_mood(dati)
+  return chats.lasi_mood()
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support

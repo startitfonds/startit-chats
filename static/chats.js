@@ -144,6 +144,12 @@ function saprotiKomandu(teksts) {
     case "/v":
       zinja = "Javascript versija: " + VERSIJA;
       break;
+    case "/es":
+      if (vardi.length < 2) {
+         zinja = "Norādi savu garastāvokli, piemēram: /es ballīte!"
+      } else {
+       gStavoklis(teksts);    
+      }
     case "/paliigaa":
     case "/paliga":
     case "/help":
@@ -160,6 +166,38 @@ function uzstadiVaardu(jaunaisVards) {
   setCookie('name', jaunaisVards, 90)
   vards = jaunaisVards
   return `${vecaisVards} kļuva par ${vards}`
+}
+
+function gStavoklis(teksts) {
+  let vardi = teksts.split(" ");
+  /* let izvads = vardi.slice(1); */
+ let izvads = Object.assign({}, vardi.slice(1));
+  
+  fetch('/chats/set_mood', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ "mood": izvads })
+});    
+
+gStavoklisNoFaila();
+
+}
+
+function gStavoklisNoFaila(){ 
+fetch('/chats/get_mood')
+.then(function(response) {
+  return response.json()
+})
+.then(function(newMood) {
+  console.log(newMood);
+ let saturs = Object.values(newMood);
+ console.log(saturs);
+ let satursV = Object.keys(newMood);
+ console.log(satursV);
+ setCookie('mood', saturs, 90)
+})
 }
 
 function paradiPalidzibu() {

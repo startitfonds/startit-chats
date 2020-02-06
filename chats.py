@@ -17,3 +17,17 @@ def pieraksti_zinju(dati):
     json_data["laiks"] = datetime.now()
     with open(LOGFAILS, "a", newline="", encoding="utf-8") as f:
         f.write(json.dumps(json_data, ensure_ascii=False) + "\n")
+
+GARASTAVOKLIS = "mood.txt"
+
+def pieraksti_mood(dati):
+    json_dati = dati["mood"]
+    with open(GARASTAVOKLIS, "a", newline="", encoding="utf-8") as f:
+        f.write(json.dumps(json_dati, ensure_ascii=False) + "\n")
+
+def lasi_mood():
+    mood_status = []
+    with open(GARASTAVOKLIS, "r", encoding="utf-8") as f:
+        for row in f:
+            mood_status.append(json.loads(row))
+    return jsonify({"mood": row})
