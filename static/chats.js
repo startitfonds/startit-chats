@@ -179,7 +179,7 @@ document.addEventListener("keydown", function(event) {
     ieraksts += 1 
     document.getElementById("zinja").value = komandas[ieraksts-1]
   }
-  if (event.keyCode === 40 &&  ieraksts > 1 ) {
+  if (event.keyCode === 40 && ieraksts > 1) {
     ieraksts -= 1 
     document.getElementById("zinja").value = komandas[ieraksts-1]
   }
