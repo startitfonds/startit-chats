@@ -1,6 +1,8 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
+let komandas = []
+let ieraksts = 0;
 
 
 /*
@@ -96,7 +98,7 @@ async function suutiZinju() {
     // Nolasa ievades lauka saturu
     let zinjasElements = document.getElementById("zinja");
     let zinja = zinjasElements.value;
-
+    komandas.push(zinja);
     // pārbaudām vai ir vispār kaut kas ierakstīts
     if (zinja.length > 0) {
 
@@ -172,6 +174,16 @@ var versijasLauks = document.getElementById("versija");
 versijasLauks.innerHTML = "JS versija: " + VERSIJA;
 // Atrod ievades lauku
 var ievadesLauks = document.getElementById("zinja");
+document.addEventListener("keydown", function(event) {
+  if (event.keyCode === 38 && ieraksts < komandas.length) {
+    ieraksts += 1 
+    document.getElementById("zinja").value = komandas[ieraksts-1]
+  }
+  if (event.keyCode === 40 && ieraksts > 1) {
+    ieraksts -= 1 
+    document.getElementById("zinja").value = komandas[ieraksts-1]
+  }
+  })
 // Gaida signālu no klaviatūras, ka ir nospiests Enter taustiņš
 ievadesLauks.addEventListener("keyup", function(event) {
   // Numur 13 ir "Enter" taustiņš
