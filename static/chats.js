@@ -175,7 +175,6 @@ versijasLauks.innerHTML = "JS versija: " + VERSIJA;
 // Atrod ievades lauku
 var ievadesLauks = document.getElementById("zinja");
 document.addEventListener("keydown", function(event) {
-  
   if (event.keyCode === 38 && ieraksts < komandas.length) {
     ieraksts += 1 
     document.getElementById("zinja").value = komandas[ieraksts-1]
