@@ -184,7 +184,6 @@ document.addEventListener("keydown", function(event) {
     ieraksts -= 1 
     document.getElementById("zinja").value = komandas[ieraksts-1]
   }
-    
   })
 // Gaida signālu no klaviatūras, ka ir nospiests Enter taustiņš
 ievadesLauks.addEventListener("keyup", function(event) {
