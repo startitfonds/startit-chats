@@ -21,7 +21,7 @@ class Chats {
 
     // no atsūtītajiem datiem izveidojam masīvu ar zinju objektiem
     for (const rinda of dati.chats) {
-      const zinja = new Zinja(rinda.vards, rinda.zinja);
+      const zinja = new Zinja(rinda.vards, rinda.zinja, rinda.laiks);
       zinja.adresats = rinda.adresats;
       this.add(zinja);
     }
@@ -53,24 +53,26 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja) {
+  constructor(vards, zinja, laiks="") {
     this.vards = vards;
     this.zinja = zinja;
-    this.adresats = "visi"; // nedrīkst izvēlteis šadu vārdu
+    this.laiks = laiks;
+    this.adresats = "visi"; // nedrīkst izvēlties šādu vārdu
   }
 
   formateRindu() {
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
+    
     let teksts = "";
     let newLI = document.createElement("li");
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
     if (this.adresats == "visi") {
-      teksts = this.vards + ": " + this.zinja;      
+      teksts = this.laiks + "~" + this.vards + ": " + this.zinja;      
     } else {
-      teksts = this.vards + "->" + this.adresats + ": " + this.zinja;
+      teksts = this.laiks + "~" + this.vards + "->" + this.adresats + ": " + this.zinja;
       newDiv.className = newDivclassName + " privata-zinja";
     }
     let newContent = document.createTextNode(teksts); 
