@@ -1,5 +1,5 @@
 from flask import json, jsonify
-
+from datetime import datetime
 
 LOGFAILS = "chats.txt"
 
@@ -17,5 +17,8 @@ def lasi(adresats):
 
 
 def pieraksti_zinju(dati):
+    now = datetime.now()
+    laiks = now.strftime("%Y/%m/%d, %H:%M:%S")
     with open(LOGFAILS, "a", newline="", encoding="utf-8") as f:
+        dati["chats"]["laiks"]=laiks
         f.write(json.dumps(dati["chats"]) + "\n")
