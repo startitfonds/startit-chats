@@ -17,6 +17,7 @@ def lasi(adresats):
 
 
 def pieraksti_zinju(dati):
+    dati["chats"]["zinja"] = dati["chats"]["zinja"][0:140] # limitējam ziņas garumu 
     now = datetime.now()
     laiks = now.strftime("%Y/%m/%d, %H:%M:%S")
     with open(LOGFAILS, "a", newline="", encoding="utf-8") as f:
