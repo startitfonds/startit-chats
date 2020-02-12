@@ -150,6 +150,9 @@ function saprotiKomandu(ievades_teksts) {
         chata_rinda.zinja = uzstadiVaardu(ievades_vardi[1]);
       }
       break;
+    case "/uptime":
+      servera_uptime();
+      break;
     case "/versija":
     case "/v":
       chata_rinda.zinja = "Javascript versija: " + VERSIJA;
@@ -177,6 +180,12 @@ function saprotiKomandu(ievades_teksts) {
   return chata_rinda;
 }
 
+async function servera_uptime() {
+  const atbilde = await fetch('/uptime');
+  uptaims = await atbilde.text();
+  var uptimeLauks = document.getElementById("uptime");
+  uptimeLauks.innerHTML = "Servera darbības laiks: " + uptaims;
+}
 
 function uzstadiVaardu(jaunaisVards) {
   let vecaisVards = vards;
