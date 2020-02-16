@@ -171,7 +171,6 @@ function uzstadiVaardu(jaunaisVards) {
 }
 // Ieslēdz tulkošanu uz pupiņvalodu
 function uzstaditPupinu() {
-  const pupinuPirms = pupinu
   pupinu = !pupinuPirms
   return `Pupinu valodas statuss: ${pupinu}!`
 }
