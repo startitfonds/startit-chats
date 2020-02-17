@@ -110,6 +110,7 @@ async function suutiZinju() {
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
         const rinda = new Zinja(vards, zinja)
+        spelet()
 
         const atbilde = await fetch('/chats/suuti', {
             method: 'POST',
@@ -191,3 +192,8 @@ ievadesLauks.addEventListener("keyup", function(event) {
     suutiZinju();
   }
 });
+
+function spelet() {
+  let audio = new Audio('static/sounds/water_droplet.mp3')
+  audio.play()
+}
