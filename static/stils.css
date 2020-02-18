@@ -126,3 +126,11 @@ a:hover, a:active, a:focus {
   background: rgb(168, 168, 168);
   border: 1px solid  rgb(168, 168, 168);
 }
+
+#mutebtn {
+  background-image: url(img/speaker.svg);
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  outline: none;
+}
