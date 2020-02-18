@@ -193,19 +193,24 @@ ievadesLauks.addEventListener("keyup", function(event) {
   }
 });
 
+let mutebtn = document.getElementById("mutebtn")
+mutebtn.addEventListener("click", bezSkanas)
+
+function bezSkanas(){
+  let statuss = mutebtn.value
+  if(statuss == "on") {
+    mutebtn.value = "off"
+    mutebtn.style.background = "url(static/img/speaker_mute.svg) no-repeat"    
+  } else {
+    mutebtn.value = "on"
+    mutebtn.style.background = "url(static/img/speaker.svg) no-repeat"
+  }
+}
+
 function skanja() {
   let audio = new Audio('static/sounds/water_droplet.mp3')
-  let mutebtn = document.getElementById("mutebtn")
-  mutebtn.addEventListener("click", bezSkanas)
-
-  function bezSkanas() {
-    if(audio.muted) {
-      audio.muted = false
-      mutebtn.style.background = "url(static/img/speaker.svg) no-repeat"
-    } else {
-      audio.muted = true
-      mutebtn.style.background = "url(static/img/speaker_mute.svg) no-repeat"
-    }
+  if (mutebtn.value == "on") {
+    audio.play()
   }
-  audio.play()
 }
+
