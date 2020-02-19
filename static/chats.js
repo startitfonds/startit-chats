@@ -209,8 +209,6 @@ function bezSkanas(){
 
 function skanja() {
   let audio = new Audio('static/sounds/water_droplet.mp3')
-  if (mutebtn.value == "on") {
-    audio.play()
-  }
+  if (mutebtn.value == "on") audio.play()
 }
 
