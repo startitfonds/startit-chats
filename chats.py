@@ -27,13 +27,13 @@ def pieraksti_zinju(dati):
     laiks = now.strftime("%Y/%m/%d, %H:%M:%S")
     # Cenzūra
     chata_rindas = []
-    zinjas_vardi = dati.split()
+    zinjas_vardi = dati["chats"]["zinja"].split()
     for vards in zinjas_vardi:
         if vards in SLIKTIE_VARDI:
             chata_rindas.append(LABAIS_VARDS)
         else:
             chata_rindas.append(vards)
-    dati.join(zinjas_vardi)
+    dati["chats"]["zinja"]=" ".join(chata_rindas)
     with open(LOGFAILS, "a", newline="", encoding="utf-8") as f:
         dati["chats"]["laiks"] = laiks
         f.write(json.dumps(dati["chats"]) + "\n")
