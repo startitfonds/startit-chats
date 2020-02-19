@@ -1,6 +1,8 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
+var izceltsRegex = new RegExp("^\\*\\*.*\\*\\*$");
+var pazinojumsRegex = new RegExp("^!.*!$");
 let komandas = []
 let ieraksts = 0;
 
@@ -63,12 +65,20 @@ class Zinja {
   formateRindu() {
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = "left clearfix";
-    const newDivclassName = "chat-body clearfix";
+    let newDivclassName = "chat-body clearfix";
+    if (izceltsRegex.test(this.zinja) ) {
+      this.zinja = this.zinja.split('**')[1]
+      newDivclassName += " izcelts";
+    }
+    else if ((pazinojumsRegex.test(this.zinja) )){
+      this.zinja = this.zinja.split('!')[1];
+      newDivclassName += " pazinojums";
+    }
+    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
     let newLI = document.createElement("li");
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
-    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
     newDiv.appendChild(newContent); 
@@ -142,6 +152,12 @@ function saprotiKomandu(teksts) {
         zinja = uzstadiVaardu(vardi[1]);
       }
       break;
+    case "/izcelts":
+      zinja = "**" + teksts.replace('/izcelts ','') + "**";
+      break;
+    case "/pazinojums":
+        zinja = "!" + teksts.replace('/pazinojums ','') + "!";
+        break;
     case "/versija":
     case "/v":
       zinja = "Javascript versija: " + VERSIJA;
@@ -165,7 +181,7 @@ function uzstadiVaardu(jaunaisVards) {
 }
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/izcelts", "/pazinojums"'
 }
 
 
