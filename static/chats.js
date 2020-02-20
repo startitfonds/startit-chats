@@ -136,7 +136,7 @@ function saprotiKomandu(teksts) {
   let komanda = vardi[0];
   let zinja;
   switch (komanda) {
-    case "/chuck":
+    case "/joks":
       zinja = getChuckJoke();
       break;
     case "/vards":
@@ -170,7 +170,7 @@ function uzstadiVaardu(jaunaisVards) {
 }
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", /chuck'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", /joks'
 }
 
 
