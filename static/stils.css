@@ -124,15 +124,15 @@ a:hover, a:active, a:focus {
 
 .chat li.left .chat-body::before {
   background: rgb(221, 221, 221);
-  border: 1px solid  rgb(221, 221, 221);
+  border: 1px solid rgb(221, 221, 221);
 }
 .chat li.left.user .chat-body.user {
   background: rgb(248, 160, 160);
-  border: 1px solid   rgb(248, 160, 160);;
+  border: 1px solid rgb(248, 160, 160);
 }
 
 .chat li.left.user .chat-body.user::before {
-  background:  rgb(248, 160, 160);;
-  border: 1px solid   rgb(248, 160, 160);;
+  background:rgb(248, 160, 160);
+  border: 1px solid rgb(248, 160, 160);
 }
 
