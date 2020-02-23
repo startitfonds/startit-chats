@@ -1,6 +1,7 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
+var pupinu = false
 let komandas = []
 let ieraksts = 0;
 
@@ -54,10 +55,11 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja, laiks) {
+  constructor(vards, zinja, laiks, pupinu) {
     this.vards = vards;
     this.zinja = zinja;
     this.laiks = laiks;
+    this.pupinu = pupinu;
   }
 
   formateRindu() {
@@ -114,7 +116,8 @@ async function suutiZinju() {
         // izdzēš ievades lauku
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        const rinda = new Zinja(vards, zinja)
+        // const rinda = new Zinja(vards, zinja)
+        const rinda = new Zinja(vards, zinja, null, pupinu)
 
         const atbilde = await fetch('/chats/suuti', {
             method: 'POST',
@@ -149,6 +152,9 @@ function saprotiKomandu(teksts) {
         zinja = uzstadiVaardu(vardi[1]);
       }
       break;
+    case "/pupas":
+        zinja = uzstaditPupinu();
+      break;
     case "/versija":
     case "/v":
       zinja = "Javascript versija: " + VERSIJA;
@@ -170,9 +176,14 @@ function uzstadiVaardu(jaunaisVards) {
   vards = jaunaisVards
   return `${vecaisVards} kļuva par ${vards}`
 }
+// Ieslēdz tulkošanu uz pupiņvalodu
+function uzstaditPupinu() {
+  pupinu = !pupinu
+  return `Pupinu valodas statuss: ${pupinu}!`
+}
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", /joks'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/pupas", "/joks"'
 }
 
 
@@ -198,3 +209,4 @@ ievadesLauks.addEventListener("keyup", function(event) {
     suutiZinju();
   }
 });
+
