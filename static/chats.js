@@ -1,6 +1,7 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
+var pupinu = false
 let komandas = []
 let ieraksts = 0;
 
@@ -54,17 +55,23 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja, laiks) {
+  constructor(vards, zinja, laiks, pupinu) {
     this.vards = vards;
     this.zinja = zinja;
     this.laiks = laiks;
+    this.pupinu = pupinu;
   }
 
   formateRindu() {
+    let a = ''
+    if (this.vards == vards){
+      a = 'user'
+    }
+
     const laiks = this.laiks ? this.laiks : '-';
-    const LIclassName = "left clearfix";
-    const newDivclassName = "chat-body clearfix";
-    let newLI = document.createElement("li");
+    const LIclassName = `left ${a} clearfix`;
+    const newDivclassName = `chat-body ${a} clearfix`;
+    let newLI = document.createElement(`li`);
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
@@ -109,7 +116,7 @@ async function suutiZinju() {
         // izdzēš ievades lauku
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        const rinda = new Zinja(vards, zinja)
+        const rinda = new Zinja(vards, zinja, null, pupinu)
         skanja()
 
         const atbilde = await fetch('/chats/suuti', {
@@ -129,12 +136,14 @@ async function suutiZinju() {
     }
 }
 
-
 function saprotiKomandu(teksts) {
   let vardi = teksts.split(" ");
   let komanda = vardi[0];
   let zinja;
   switch (komanda) {
+    case "/joks":
+      zinja = getChuckJoke();
+      break;
     case "/vards":
     case "/vaards":
       if (vardi.length < 2) {
@@ -142,6 +151,9 @@ function saprotiKomandu(teksts) {
       } else {
         zinja = uzstadiVaardu(vardi[1]);
       }
+      break;
+    case "/pupas":
+        zinja = uzstaditPupinu();
       break;
     case "/versija":
     case "/v":
@@ -164,9 +176,14 @@ function uzstadiVaardu(jaunaisVards) {
   vards = jaunaisVards
   return `${vecaisVards} kļuva par ${vards}`
 }
+// Ieslēdz tulkošanu uz pupiņvalodu
+function uzstaditPupinu() {
+  pupinu = !pupinu
+  return `Pupinu valodas statuss: ${pupinu}!`
+}
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/pupas", "/joks"'
 }
 
 
