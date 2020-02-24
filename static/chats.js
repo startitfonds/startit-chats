@@ -193,7 +193,7 @@ ievadesLauks.addEventListener("keyup", function(event) {
   }
 });
 
-function bezSkanas(){
+function skanaJaNe(){
   let soundbtn = document.getElementById("soundbtn")
   let statuss = soundbtn.value == 'up' ? 'off' : 'up'
   soundbtn.value = statuss
