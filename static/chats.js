@@ -116,8 +116,8 @@ async function suutiZinju() {
         // izdzēš ievades lauku
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        // const rinda = new Zinja(vards, zinja)
         const rinda = new Zinja(vards, zinja, null, pupinu)
+        skanja()
 
         const atbilde = await fetch('/chats/suuti', {
             method: 'POST',
@@ -210,3 +210,13 @@ ievadesLauks.addEventListener("keyup", function(event) {
   }
 });
 
+function skanaJaNe(){
+  let soundbtn = document.getElementById("soundbtn")
+  let statuss = soundbtn.value == 'up' ? 'off' : 'up'
+  soundbtn.value = statuss
+  document.getElementById("ikona").className = `fa fa-volume-${statuss}`
+}
+
+function skanja() {
+  if (soundbtn.value == "up") new Audio('static/sounds/water_droplet.mp3').play()
+}
