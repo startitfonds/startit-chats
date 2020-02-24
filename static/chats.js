@@ -12,6 +12,7 @@ class Chats {
   constructor(dati) {
     this.vards = vards;
     this.zinjas = [];
+    
 
     // pārbaudām vai ir vispār kāda jau esoša ziņa
     // ja nav, parādām paziņojumu (tikai lokāli!)
@@ -47,6 +48,7 @@ class Chats {
   }
 }
 
+
 /*
 Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
@@ -56,7 +58,7 @@ class Zinja {
     this.vards = vards;
     this.zinja = zinja;
     this.laiks = laiks;
-  }
+    }
 
   formateRindu() {
     const laiks = this.laiks ? this.laiks : '-';
@@ -69,7 +71,7 @@ class Zinja {
     let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
-    newDiv.appendChild(newContent); 
+    newDiv.appendChild(newContent);
     return newLI;
   }
 }
@@ -140,16 +142,17 @@ function saprotiKomandu(teksts) {
         zinja = uzstadiVaardu(vardi[1]);
       }
       break;
+    case "/es":
+      if (vardi.length < 2) {
+        zinja = "Norādi savu garastavokli: /es staigā pa mežu, noņem garastāvokli: /es - "
+      } else {
+        zinja = nolasiGarastavokli(vardi.splice(1,vardi.length));
+      }
+      break;
     case "/versija":
     case "/v":
       zinja = "Javascript versija: " + VERSIJA;
       break;
-    case "/es":
-      if (vardi.length < 2) {
-         zinja = "Norādi savu garastāvokli, piemēram: /es ballīte!"
-      } else {
-       gStavoklis(teksts);    
-      }
     case "/paliigaa":
     case "/paliga":
     case "/help":
@@ -162,48 +165,51 @@ function saprotiKomandu(teksts) {
 }
 
 function uzstadiVaardu(jaunaisVards) {
-  const vecaisVards = vards
-  setCookie('name', jaunaisVards, 90)
-  vards = jaunaisVards
+  const vecaisVards = vards;
+  vards = jaunaisVards;
   return `${vecaisVards} kļuva par ${vards}`
 }
 
-function gStavoklis(teksts) {
-  let vardi = teksts.split(" ");
-  /* let izvads = vardi.slice(1); */
- let izvads = Object.assign({}, vardi.slice(1));
-  
-  fetch('/chats/set_mood', {
+function nolasiGarastavokli(gStavoklis){
+  const gStavoklisUzServeri = new GaraStavoklis(vards, gStavoklis.join(' '))
+  let parameters = {
     method: 'POST',
+    body: JSON.stringify({"mood": gStavoklisUzServeri}),
     headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ "mood": izvads })
-});    
-
-gStavoklisNoFaila();
-
-}
-
-function gStavoklisNoFaila(){ 
-fetch('/chats/get_mood')
-.then(function(response) {
-  return response.json()
-})
-.then(function(newMood) {
-  console.log(newMood);
- let saturs = Object.values(newMood);
- console.log(saturs);
- let satursV = Object.keys(newMood);
- console.log(satursV);
- setCookie('mood', saturs, 90)
-})
+      'Content-Type': 'application/json'
+    }
+  }
+  fetch('/garastavoklis/pierakstit_grarastavokli', parameters)
+  .then(res => res.json())
+ .then((data) => {
+    console.log('Success:', data)
+  })
+  .catch((error) => {
+    console.error('Error:', error)
+  })
+  lasiGarastavokli()
+  uzstadiVaardu(vards+" "+gStavoklis)
+  
+  return ` tagad *${gStavoklis}*`
 }
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija"'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/es" '
 }
 
+class GaraStavoklis {
+  constructor(vards, gStavoklis, laiks) {
+    this.vaards = vards
+    this.garaStaavoklis = gStavoklis
+    this.precizsLaiks = laiks
+    }
+}
+async function lasiGarastavokli() { 
+  const atbilde = await fetch('/garastavoklis/lasit_garastavokli')
+  const datuObjekts = await atbilde.json()
+  let garigais = new GaraStavoklis(datuObjekts)
+  return garigais;
+}
 
 // Ērtības funkcionalitāte
 var versijasLauks = document.getElementById("versija");
