@@ -193,22 +193,19 @@ ievadesLauks.addEventListener("keyup", function(event) {
   }
 });
 
-let mutebtn = document.getElementById("mutebtn")
-mutebtn.addEventListener("click", bezSkanas)
-
 function bezSkanas(){
-  let statuss = mutebtn.value
+  let soundbtn = document.getElementById("soundbtn")
+  let statuss = soundbtn.value
   if(statuss == "on") {
-    mutebtn.value = "off"
-    mutebtn.style.background = "url(static/img/speaker_mute.svg) no-repeat"    
+    soundbtn.value = "off"
+    soundbtn.style.background = "url(static/img/speaker_mute.svg) no-repeat"    
   } else {
-    mutebtn.value = "on"
-    mutebtn.style.background = "url(static/img/speaker.svg) no-repeat"
+    soundbtn.value = "on"
+    soundbtn.style.background = "url(static/img/speaker.svg) no-repeat"
   }
 }
 
 function skanja() {
-  let audio = new Audio('static/sounds/water_droplet.mp3')
-  if (mutebtn.value == "on") audio.play()
+  if (soundbtn.value == "on") new Audio('static/sounds/water_droplet.mp3').play()
 }
 
