@@ -48,7 +48,14 @@ class Chats {
   }
 }
 
-
+var garaStavoklisNoServera = {} //Objekts, kurā labāsies mood garastavokļu objektu masīvs
+async function lasiGarastavokli() { 
+  const atbilde = await fetch('/garastavoklis/lasit_garastavokli')
+  const datuObjekts = await atbilde.json()
+  garaStavoklisNoServera = datuObjekts
+  await new Promise(resolve => setTimeout(resolve, ATJAUNOT*3)) //katras 3 sekundes lasam no servera garastāvokļus
+  await lasiGarastavokli()
+}
 /*
 Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
@@ -59,8 +66,18 @@ class Zinja {
     this.zinja = zinja;
     this.laiks = laiks;
     }
-
-  formateRindu() {
+    formateRindu() {
+    let noskanojums;
+    let noskanojumsParaadiit;
+    if (Object.entries(garaStavoklisNoServera) == 0) {
+     noskanojumsParaadiit = ""; }
+     else {
+      noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards);
+      if (Object.entries(noskanojums) == 0){ //Te čats sabrūk, ja mainu čatoāja vārdu
+        noskanojumsParaadiit = ""
+      }
+      noskanojumsParaadiit = noskanojums.garaStaavoklis;
+     }
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
@@ -68,7 +85,7 @@ class Zinja {
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
-    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
+    let teksts = `${this.vards} ${noskanojumsParaadiit}: ${this.zinja}, nosūtīts: ${laiks}`;
     let newContent = document.createTextNode(teksts); 
     newLI.appendChild(newDiv); 
     newDiv.appendChild(newContent);
@@ -144,7 +161,7 @@ function saprotiKomandu(teksts) {
       break;
     case "/es":
       if (vardi.length < 2) {
-        zinja = "Norādi savu garastavokli: /es staigā pa mežu, noņem garastāvokli: /es - "
+        zinja = "Norādi savu garastavokli: /es priecīgs, noņem garastāvokli: /es - "
       } else {
         zinja = nolasiGarastavokli(vardi.splice(1,vardi.length));
       }
@@ -188,8 +205,7 @@ function nolasiGarastavokli(gStavoklis){
     console.error('Error:', error)
   })
   lasiGarastavokli()
-  uzstadiVaardu(vards+" "+gStavoklis)
-  
+ 
   return ` tagad *${gStavoklis}*`
 }
 
@@ -198,17 +214,10 @@ function paradiPalidzibu() {
 }
 
 class GaraStavoklis {
-  constructor(vards, gStavoklis, laiks) {
+  constructor(vards, gStavoklis,) {
     this.vaards = vards
     this.garaStaavoklis = gStavoklis
-    this.precizsLaiks = laiks
     }
-}
-async function lasiGarastavokli() { 
-  const atbilde = await fetch('/garastavoklis/lasit_garastavokli')
-  const datuObjekts = await atbilde.json()
-  let garigais = new GaraStavoklis(datuObjekts)
-  return garigais;
 }
 
 // Ērtības funkcionalitāte
