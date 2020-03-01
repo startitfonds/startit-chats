@@ -72,7 +72,7 @@ class Zinja {
 
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = `left ${a} clearfix`;
-    const newDivclassName = `chat-body ${a} clearfix`;
+    let newDivclassName = `chat-body ${a} clearfix`;
     if (izceltsRegex.test(this.zinja) ) {
       this.zinja = this.zinja.split('**')[1]
       newDivclassName += " izcelts";
