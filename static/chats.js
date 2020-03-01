@@ -3,6 +3,7 @@ const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
 var izceltsRegex = new RegExp("^\\*\\*.*\\*\\*$");
 var pazinojumsRegex = new RegExp("^!.*!$");
+var pupinu = false
 let komandas = []
 let ieraksts = 0;
 
@@ -56,16 +57,22 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja, laiks) {
+  constructor(vards, zinja, laiks, pupinu) {
     this.vards = vards;
     this.zinja = zinja;
     this.laiks = laiks;
+    this.pupinu = pupinu;
   }
 
   formateRindu() {
+    let a = ''
+    if (this.vards == vards){
+      a = 'user'
+    }
+
     const laiks = this.laiks ? this.laiks : '-';
-    const LIclassName = "left clearfix";
-    let newDivclassName = "chat-body clearfix";
+    const LIclassName = `left ${a} clearfix`;
+    const newDivclassName = `chat-body ${a} clearfix`;
     if (izceltsRegex.test(this.zinja) ) {
       this.zinja = this.zinja.split('**')[1]
       newDivclassName += " izcelts";
@@ -75,7 +82,7 @@ class Zinja {
       newDivclassName += " pazinojums";
     }
     let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
-    let newLI = document.createElement("li");
+    let newLI = document.createElement(`li`);
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
@@ -119,7 +126,8 @@ async function suutiZinju() {
         // izdzēš ievades lauku
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        const rinda = new Zinja(vards, zinja)
+        const rinda = new Zinja(vards, zinja, null, pupinu)
+        skanja()
 
         const atbilde = await fetch('/chats/suuti', {
             method: 'POST',
@@ -138,12 +146,14 @@ async function suutiZinju() {
     }
 }
 
-
 function saprotiKomandu(teksts) {
   let vardi = teksts.split(" ");
   let komanda = vardi[0];
   let zinja;
   switch (komanda) {
+    case "/joks":
+      zinja = getChuckJoke();
+      break;
     case "/vards":
     case "/vaards":
       if (vardi.length < 2) {
@@ -158,6 +168,9 @@ function saprotiKomandu(teksts) {
     case "/pazinojums":
         zinja = "!" + teksts.replace('/pazinojums ','') + "!";
         break;
+    case "/pupas":
+        zinja = uzstaditPupinu();
+      break;
     case "/versija":
     case "/v":
       zinja = "Javascript versija: " + VERSIJA;
@@ -179,9 +192,14 @@ function uzstadiVaardu(jaunaisVards) {
   vards = jaunaisVards
   return `${vecaisVards} kļuva par ${vards}`
 }
+// Ieslēdz tulkošanu uz pupiņvalodu
+function uzstaditPupinu() {
+  pupinu = !pupinu
+  return `Pupinu valodas statuss: ${pupinu}!`
+}
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/izcelts", "/pazinojums"'
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/pupas", "/joks", "/izcelts", "/pazinojums"'
 }
 
 
@@ -207,3 +225,14 @@ ievadesLauks.addEventListener("keyup", function(event) {
     suutiZinju();
   }
 });
+
+function skanaJaNe(){
+  let soundbtn = document.getElementById("soundbtn")
+  let statuss = soundbtn.value == 'up' ? 'off' : 'up'
+  soundbtn.value = statuss
+  document.getElementById("ikona").className = `fa fa-volume-${statuss}`
+}
+
+function skanja() {
+  if (soundbtn.value == "up") new Audio('static/sounds/water_droplet.mp3').play()
+}
