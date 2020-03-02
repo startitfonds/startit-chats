@@ -29,6 +29,20 @@ body {
   padding-bottom: 20px;
 }
 
+.izcelts {
+  font-weight:bold;
+}
+
+.pazinojums {
+  font-weight:bold;
+  color: red;
+}
+
+.pazinojums::after {
+  content: "⚠️ "attr(pazinojums);
+  display: inline;
+}
+
 ul.chat {
   padding-inline-start: 5px;
 }
