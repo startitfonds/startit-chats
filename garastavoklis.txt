@@ -1,0 +1,2 @@
+{"garastavoklis": "štopē māgā", "vaards": "testeris"}
+{"garastavoklis": "ir biologu draugs", "vaards": "raugs"}

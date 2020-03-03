@@ -19,10 +19,10 @@ def pieraksti_garastavokli(dati):
             # Ja atradām lietotāju ar vārdu
             if (ielasita_rinda_json_formata["vaards"] == json_dati["vaards"]):
                 # tad nomainām garastāvokli uz jauno vērtību
-                ielasita_rinda_json_formata["garaStaavoklis"] = json_dati["garaStaavoklis"]
+                ielasita_rinda_json_formata["garastavoklis"] = json_dati["garastavoklis"]
                 # Uzstādām mūsu karogu uz True, jo atradām lietotāju ar vārdu
                 lietotajam_jau_eksiste_garastavoklis = True
-            faila_esosie_garastavokli.append(json.loads(rinda))
+            faila_esosie_garastavokli.append(ielasita_rinda_json_formata)
     
     # Ja nebijām atraduši lietotāju ar šādu vārdu, tad ieliekam masīva beigās atsūtītos datus
     if (lietotajam_jau_eksiste_garastavoklis == False):

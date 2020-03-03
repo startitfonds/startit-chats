@@ -66,18 +66,13 @@ class Zinja {
     this.zinja = zinja;
     this.laiks = laiks;
     }
+    paraditNoskanojumu() {
+      if (Object.entries(garaStavoklisNoServera) == 0) return ''
+      const noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards)
+      return noskanojums && noskanojums.garastavoklis || ''
+    }
     formateRindu() {
-    let noskanojums;
-    let noskanojumsParaadiit;
-    if (Object.entries(garaStavoklisNoServera) == 0) {
-     noskanojumsParaadiit = ""; }
-     else {
-      noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards);
-      if (Object.entries(noskanojums) == 0){ //Te čats sabrūk, ja mainu čatoāja vārdu
-        noskanojumsParaadiit = ""
-      }
-      noskanojumsParaadiit = noskanojums.garaStaavoklis;
-     }
+    const noskanojumsParaadiit = this.paraditNoskanojumu()
     const laiks = this.laiks ? this.laiks : '-';
     const LIclassName = "left clearfix";
     const newDivclassName = "chat-body clearfix";
@@ -161,9 +156,9 @@ function saprotiKomandu(teksts) {
       break;
     case "/es":
       if (vardi.length < 2) {
-        zinja = "Norādi savu garastavokli: /es priecīgs, noņem garastāvokli: /es - "
+        zinja = "Norādi savu garastavokli: /es priecīgs, noņemt garastāvokli: /es- "
       } else {
-        zinja = nolasiGarastavokli(vardi.splice(1,vardi.length));
+        pierakstitGarastavokli(vardi.splice(1,vardi.length).join(' '));
       }
       break;
     case "/versija":
@@ -187,8 +182,8 @@ function uzstadiVaardu(jaunaisVards) {
   return `${vecaisVards} kļuva par ${vards}`
 }
 
-function nolasiGarastavokli(gStavoklis){
-  const gStavoklisUzServeri = new GaraStavoklis(vards, gStavoklis.join(' '))
+function pierakstitGarastavokli(gStavoklis){
+  const gStavoklisUzServeri = {'vaards':vards, 'garastavoklis':gStavoklis}
   let parameters = {
     method: 'POST',
     body: JSON.stringify({"mood": gStavoklisUzServeri}),
@@ -206,20 +201,12 @@ function nolasiGarastavokli(gStavoklis){
   })
   lasiGarastavokli()
  
-  return ` tagad *${gStavoklis}*`
+  return ` *${gStavoklis}*`
 }
 
 function paradiPalidzibu() {
   return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/es" '
 }
-
-class GaraStavoklis {
-  constructor(vards, gStavoklis,) {
-    this.vaards = vards
-    this.garaStaavoklis = gStavoklis
-    }
-}
-
 // Ērtības funkcionalitāte
 var versijasLauks = document.getElementById("versija");
 versijasLauks.innerHTML = "JS versija: " + VERSIJA;
