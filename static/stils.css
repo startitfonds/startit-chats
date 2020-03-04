@@ -29,6 +29,20 @@ body {
   padding-bottom: 20px;
 }
 
+.izcelts {
+  font-weight:bold;
+}
+
+.pazinojums {
+  font-weight:bold;
+  color: red;
+}
+
+.pazinojums::after {
+  content: "⚠️ "attr(pazinojums);
+  display: inline;
+}
+
 ul.chat {
   padding-inline-start: 5px;
 }
@@ -118,11 +132,21 @@ a:hover, a:active, a:focus {
 }
 
 .chat li.left .chat-body {
-  background: rgb(168, 168, 168);
-  border: 1px solid  rgb(168, 168, 168);
+  background: rgb(221, 221, 221);
+  border: 1px solid  rgb(221, 221, 221);
 }
 
 .chat li.left .chat-body::before {
-  background: rgb(168, 168, 168);
-  border: 1px solid  rgb(168, 168, 168);
+  background: rgb(221, 221, 221);
+  border: 1px solid rgb(221, 221, 221);
 }
+.chat li.left.user .chat-body.user {
+  background: rgb(248, 160, 160);
+  border: 1px solid rgb(248, 160, 160);
+}
+
+.chat li.left.user .chat-body.user::before {
+  background:rgb(248, 160, 160);
+  border: 1px solid rgb(248, 160, 160);
+}
+

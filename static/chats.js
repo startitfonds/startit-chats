@@ -1,6 +1,11 @@
 const ATJAUNOT = 1000;
 const VERSIJA = "0.5"
 var vards = getCookie('name') || "Viesis"
+var izceltsRegex = new RegExp("^\\*\\*.*\\*\\*$");
+var pazinojumsRegex = new RegExp("^!.*!$");
+var pupinu = false
+let komandas = []
+let ieraksts = 0;
 
 
 /*
@@ -61,22 +66,40 @@ Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
 Inicializē ar no servera atgrieztā json objekta vienu rindu
 */
 class Zinja {
-  constructor(vards, zinja, laiks) {
+  constructor(vards, zinja, laiks, pupinu) {
     this.vards = vards;
     this.zinja = zinja;
     this.laiks = laiks;
-    }
-    paraditNoskanojumu() {
-      if (Object.entries(garaStavoklisNoServera) == 0) return ''
-      const noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards)
-      return noskanojums && noskanojums.garastavoklis || ''
-    }
-    formateRindu() {
+    this.pupinu = pupinu;
+  }
+
+  paraditNoskanojumu() {
+    if (Object.entries(garaStavoklisNoServera) == 0) return ''
+    const noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards)
+    return noskanojums && noskanojums.garastavoklis || ''
+  }
+
+  formateRindu() {
     const noskanojumsParaadiit = this.paraditNoskanojumu()
+
+    let a = ''
+    if (this.vards == vards){
+      a = 'user'
+    }
+
     const laiks = this.laiks ? this.laiks : '-';
-    const LIclassName = "left clearfix";
-    const newDivclassName = "chat-body clearfix";
-    let newLI = document.createElement("li");
+    const LIclassName = `left ${a} clearfix`;
+    let newDivclassName = `chat-body ${a} clearfix`;
+    if (izceltsRegex.test(this.zinja) ) {
+      this.zinja = this.zinja.split('**')[1]
+      newDivclassName += " izcelts";
+    }
+    else if ((pazinojumsRegex.test(this.zinja) )){
+      this.zinja = this.zinja.split('!')[1];
+      newDivclassName += " pazinojums";
+    }
+    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
+    let newLI = document.createElement(`li`);
     newLI.className = LIclassName;
     let newDiv = document.createElement("div"); 
     newDiv.className = newDivclassName;
@@ -110,7 +133,7 @@ async function suutiZinju() {
     // Nolasa ievades lauka saturu
     let zinjasElements = document.getElementById("zinja");
     let zinja = zinjasElements.value;
-
+    komandas.push(zinja);
     // pārbaudām vai ir vispār kaut kas ierakstīts
     if (zinja.length > 0) {
 
@@ -121,7 +144,8 @@ async function suutiZinju() {
         // izdzēš ievades lauku
         zinjasElements.value = "";
         // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        const rinda = new Zinja(vards, zinja)
+        const rinda = new Zinja(vards, zinja, null, pupinu)
+        skanja()
 
         const atbilde = await fetch('/chats/suuti', {
             method: 'POST',
@@ -140,12 +164,14 @@ async function suutiZinju() {
     }
 }
 
-
 function saprotiKomandu(teksts) {
   let vardi = teksts.split(" ");
   let komanda = vardi[0];
   let zinja;
   switch (komanda) {
+    case "/joks":
+      zinja = getChuckJoke();
+      break;
     case "/vards":
     case "/vaards":
       if (vardi.length < 2) {
@@ -160,6 +186,14 @@ function saprotiKomandu(teksts) {
       } else {
         pierakstitGarastavokli(vardi.splice(1,vardi.length).join(' '));
       }
+    case "/izcelts":
+      zinja = "**" + teksts.replace('/izcelts ','') + "**";
+      break;
+    case "/pazinojums":
+        zinja = "!" + teksts.replace('/pazinojums ','') + "!";
+        break;
+    case "/pupas":
+        zinja = uzstaditPupinu();
       break;
     case "/versija":
     case "/v":
@@ -180,6 +214,11 @@ function uzstadiVaardu(jaunaisVards) {
   const vecaisVards = vards;
   vards = jaunaisVards;
   return `${vecaisVards} kļuva par ${vards}`
+}
+// Ieslēdz tulkošanu uz pupiņvalodu
+function uzstaditPupinu() {
+  pupinu = !pupinu
+  return `Pupinu valodas statuss: ${pupinu}!`
 }
 
 function pierakstitGarastavokli(gStavoklis){
@@ -205,13 +244,23 @@ function pierakstitGarastavokli(gStavoklis){
 }
 
 function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/es" '
+  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/es", "/pupas", "/joks", "/izcelts", "/pazinojums"'
 }
 // Ērtības funkcionalitāte
 var versijasLauks = document.getElementById("versija");
 versijasLauks.innerHTML = "JS versija: " + VERSIJA;
 // Atrod ievades lauku
 var ievadesLauks = document.getElementById("zinja");
+document.addEventListener("keydown", function(event) {
+  if (event.keyCode === 38 && ieraksts < komandas.length) {
+    ieraksts += 1 
+    document.getElementById("zinja").value = komandas[ieraksts-1]
+  }
+  if (event.keyCode === 40 && ieraksts > 1) {
+    ieraksts -= 1 
+    document.getElementById("zinja").value = komandas[ieraksts-1]
+  }
+  })
 // Gaida signālu no klaviatūras, ka ir nospiests Enter taustiņš
 ievadesLauks.addEventListener("keyup", function(event) {
   // Numur 13 ir "Enter" taustiņš
@@ -219,3 +268,14 @@ ievadesLauks.addEventListener("keyup", function(event) {
     suutiZinju();
   }
 });
+
+function skanaJaNe(){
+  let soundbtn = document.getElementById("soundbtn")
+  let statuss = soundbtn.value == 'up' ? 'off' : 'up'
+  soundbtn.value = statuss
+  document.getElementById("ikona").className = `fa fa-volume-${statuss}`
+}
+
+function skanja() {
+  if (soundbtn.value == "up") new Audio('static/sounds/water_droplet.mp3').play()
+}
