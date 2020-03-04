@@ -1,281 +1,190 @@
-const ATJAUNOT = 1000;
-const VERSIJA = "0.5"
-var vards = getCookie('name') || "Viesis"
-var izceltsRegex = new RegExp("^\\*\\*.*\\*\\*$");
-var pazinojumsRegex = new RegExp("^!.*!$");
-var pupinu = false
+const ATJAUNOT = 500
+const VERSIJA = '0.5'
+
+let vards = getCookie('vards') || 'Viesis'
+let pupinu = false
 let komandas = []
-let ieraksts = 0;
+let ieraksts = 0
 
-
-/*
-Klase, kas satur visu chata saturu, struktūru un metainformāciju
-Inicializē ar no servera atgriezto json objektu
-Un veic dažas vienkāršas pārbaudes
-*/
 class Chats {
-  constructor(dati) {
-    this.vards = vards;
-    this.zinjas = [];
-    
-
-    // pārbaudām vai ir vispār kāda jau esoša ziņa
-    // ja nav, parādām paziņojumu (tikai lokāli!)
-    if (dati.chats.length == 0) {
-      this.zinjas = [new Zinja("Pārlūkprogramma", "Čatā pašlaik ziņu nav, uzrakstiet kaut ko!")];
-    }
-
-    // no atsūtītajiem datiem izveidojam masīvu ar zinju objektiem
-    for (const rinda of dati.chats) {
-      const zinja = new Zinja(rinda.vards, rinda.zinja, rinda.laiks);
-      this.add(zinja);
-    }
+  constructor() {
+    this.zinjas = []
+    this.garastavokli = []
   }
 
-  add(zinja) {
-    this.zinjas.push(zinja);
+  notiritZinjas = () => this.zinjas = []
+  notiritGarastavoklus =() => this.garastavokli = []
+
+  pievienotZinju = (zinja) => this.zinjas.push(zinja)
+  pievienotGarastavokli = (garastavoklis) => this.garastavokli.push(garastavoklis)
+
+  vaiSkanjaIeslegta = () => document.getElementById('skanjasPoga').value === 'up'
+  atskanjoSkanju = () => new Audio('static/sounds/water_droplet.mp3').play()
+
+  pievienotZinjas = (visasZinjas) => {
+    this.notiritZinjas()
+    visasZinjas.length == 0
+      ? this.pievienotZinju(this.tuksaZinja())
+      : visasZinjas.forEach(({ vards, zinja, laiks }) => this.pievienotZinju(new Zinja(vards, zinja, laiks)))
   }
 
-  raadiChataRindas() {
-    const chatUL = document.getElementById("chats");
+  pievienotGarastavokljus = (visiGarastavokli) => {
+    if (visiGarastavokli.length == 0) return
+    this.notiritGarastavoklus()
+    visiGarastavokli.forEach(garastavoklis => this.pievienotGarastavokli(garastavoklis))
+  }
+
+  tuksaZinja = () => (
+    new Zinja(
+      'Pārlūkprogramma',
+      'Čatā pašlaik ziņu nav, uzrakstiet kaut ko!',
+      'Tue, 03 Mar 2020 22:38:10 GMT'
+    )
+  )
+
+  raadiChataRindas = () => {
+    const chatUL = document.getElementById('chats')
     // novaacam ieprieksheejo saturu
-    while (chatUL.firstChild) {
-        chatUL.firstChild.remove();
-    }
+    while (chatUL.firstChild) chatUL.firstChild.remove()
     // pievienojam visas zinjas
-    for (const zinja of this.zinjas) {
-      let chatLI = zinja.formateRindu();
-      chatUL.appendChild(chatLI);
-    }
+    this.zinjas.forEach(zinja => chatUL.innerHTML += zinja.formateRindu(this.garastavokli))
     // noskrolleejam uz leju pie peedeejaa chata texta
-    var chatScrollBox = chatUL.parentNode;
-    chatScrollBox.scrollTop = chatScrollBox.scrollHeight;
-  }
-}
-
-var garaStavoklisNoServera = {} //Objekts, kurā labāsies mood garastavokļu objektu masīvs
-async function lasiGarastavokli() { 
-  const atbilde = await fetch('/garastavoklis/lasit_garastavokli')
-  const datuObjekts = await atbilde.json()
-  garaStavoklisNoServera = datuObjekts
-  await new Promise(resolve => setTimeout(resolve, ATJAUNOT*3)) //katras 3 sekundes lasam no servera garastāvokļus
-  await lasiGarastavokli()
-}
-/*
-Klase, kas satur visu vienas ziņas saturu, struktūru un metainformāciju
-Inicializē ar no servera atgrieztā json objekta vienu rindu
-*/
-class Zinja {
-  constructor(vards, zinja, laiks, pupinu) {
-    this.vards = vards;
-    this.zinja = zinja;
-    this.laiks = laiks;
-    this.pupinu = pupinu;
+    var chatScrollBox = chatUL.parentNode
+    chatScrollBox.scrollTop = chatScrollBox.scrollHeight
   }
 
-  paraditNoskanojumu() {
-    if (Object.entries(garaStavoklisNoServera) == 0) return ''
-    const noskanojums = garaStavoklisNoServera.mood.find(k => k.vaards === vards)
-    return noskanojums && noskanojums.garastavoklis || ''
+  uzstadiVaardu = (jaunaisVards) => {
+    const vecaisVards = vards
+    vards = jaunaisVards
+    setCookie('vards', vards, 3600)
+    return `${vecaisVards} kļuva par ${vards}`
   }
 
-  formateRindu() {
-    const noskanojumsParaadiit = this.paraditNoskanojumu()
-
-    let a = ''
-    if (this.vards == vards){
-      a = 'user'
-    }
-
-    const laiks = this.laiks ? this.laiks : '-';
-    const LIclassName = `left ${a} clearfix`;
-    let newDivclassName = `chat-body ${a} clearfix`;
-    if (izceltsRegex.test(this.zinja) ) {
-      this.zinja = this.zinja.split('**')[1]
-      newDivclassName += " izcelts";
-    }
-    else if ((pazinojumsRegex.test(this.zinja) )){
-      this.zinja = this.zinja.split('!')[1];
-      newDivclassName += " pazinojums";
-    }
-    let teksts = `${this.vards}: ${this.zinja}, nosūtīts: ${laiks}`;
-    let newLI = document.createElement(`li`);
-    newLI.className = LIclassName;
-    let newDiv = document.createElement("div"); 
-    newDiv.className = newDivclassName;
-    let teksts = `${this.vards} ${noskanojumsParaadiit}: ${this.zinja}, nosūtīts: ${laiks}`;
-    let newContent = document.createTextNode(teksts); 
-    newLI.appendChild(newDiv); 
-    newDiv.appendChild(newContent);
-    return newLI;
+  uzstaditPupinu = () => {
+    pupinu = !pupinu
+    return `Pupinu valodas statuss: ${pupinu}!`
   }
-}
 
+  skanaJaNe = () => {
+    let skanjasPoga = document.getElementById('skanjasPoga')
+    let skanjasPogasStatuss = skanjasPoga.value == 'up' ? 'off' : 'up'
+    skanjasPoga.value = skanjasPogasStatuss
+    document.getElementById('ikona').className = `fa fa-volume-${skanjasPogasStatuss}`
+  }
 
-/*
-Ielādē tērzēšanas datus no servera
-Uzstāda laiku pēc kāda atkārtoti izsaukt šo pašu funkciju
-*/
-async function lasiChatu() {
-    const atbilde = await fetch('/chats/lasi');
-    const datuObjekts = await atbilde.json();
-    let dati = new Chats(datuObjekts);
-    dati.raadiChataRindas();
-    await new Promise(resolve => setTimeout(resolve, ATJAUNOT));
-    await lasiChatu();
-}
+  paradiPalidzibu = () => {
+    const komandas = [
+      'vards JaunaisVards',
+      'palidziba',
+      'versija',
+      'es',
+      'pupas',
+      'joks',
+      'izcelts',
+      'pazinojums'
+    ]
+    const visasKomandasKopa = komandas.map(komanda => `,'/${komanda}'`).join(' ')
+    return `'Pieejamās komandas: ${visasKomandasKopa}`
+  }
 
-
-/*
-Publicē tērzēšanas ziņas datus uz serveri
-*/
-async function suutiZinju() {
-    // Nolasa ievades lauka saturu
-    let zinjasElements = document.getElementById("zinja");
-    let zinja = zinjasElements.value;
-    komandas.push(zinja);
-    // pārbaudām vai ir vispār kaut kas ierakstīts
-    if (zinja.length > 0) {
-
-        if (zinja.startsWith("/")) {
-            zinja = saprotiKomandu(zinja);
-        }
-
-        // izdzēš ievades lauku
-        zinjasElements.value = "";
-        // izveido jaunu chata rindinju no vārda, ziņas utml datiem
-        const rinda = new Zinja(vards, zinja, null, pupinu)
-        skanja()
-
-        const atbilde = await fetch('/chats/suuti', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "chats": rinda })
-        });
-        const datuObjekts = await atbilde.json();
-
-        // parāda jauno chata saturu
-        let dati = new Chats(datuObjekts);
-        dati.raadiChataRindas();
-    } else {
-        console.log("Tukšu ziņu nesūtām uz serveri")
-    }
-}
-
-function saprotiKomandu(teksts) {
-  let vardi = teksts.split(" ");
-  let komanda = vardi[0];
-  let zinja;
-  switch (komanda) {
-    case "/joks":
-      zinja = getChuckJoke();
-      break;
-    case "/vards":
-    case "/vaards":
-      if (vardi.length < 2) {
-        zinja = "Norādi jauno vārdu, piemēram: /vards MansJaunaisVards"
-      } else {
-        zinja = uzstadiVaardu(vardi[1]);
-      }
-      break;
-    case "/es":
-      if (vardi.length < 2) {
-        zinja = "Norādi savu garastavokli: /es priecīgs, noņemt garastāvokli: /es- "
-      } else {
-        pierakstitGarastavokli(vardi.splice(1,vardi.length).join(' '));
-      }
-    case "/izcelts":
-      zinja = "**" + teksts.replace('/izcelts ','') + "**";
-      break;
-    case "/pazinojums":
-        zinja = "!" + teksts.replace('/pazinojums ','') + "!";
+  saprotiKomandu = (zinja) => {
+    const komanda = zinja.split(' ')[0]
+    const saturs = zinja.split(' ').splice(1, zinja.length).join(' ')
+    switch (komanda) {
+      case '/joks':
+        return getChuckJoke()
         break;
-    case "/pupas":
-        zinja = uzstaditPupinu();
-      break;
-    case "/versija":
-    case "/v":
-      zinja = "Javascript versija: " + VERSIJA;
-      break;
-    case "/paliigaa":
-    case "/paliga":
-    case "/help":
-    case "/?":
-    default:
-      zinja = paradiPalidzibu();
-      break;
-  }
-  return zinja;
-}
-
-function uzstadiVaardu(jaunaisVards) {
-  const vecaisVards = vards;
-  vards = jaunaisVards;
-  return `${vecaisVards} kļuva par ${vards}`
-}
-// Ieslēdz tulkošanu uz pupiņvalodu
-function uzstaditPupinu() {
-  pupinu = !pupinu
-  return `Pupinu valodas statuss: ${pupinu}!`
-}
-
-function pierakstitGarastavokli(gStavoklis){
-  const gStavoklisUzServeri = {'vaards':vards, 'garastavoklis':gStavoklis}
-  let parameters = {
-    method: 'POST',
-    body: JSON.stringify({"mood": gStavoklisUzServeri}),
-    headers: {
-      'Content-Type': 'application/json'
+      case '/vards':
+      case '/vaards':
+        return saturs.length < 1
+          ? 'Norādi jauno vārdu, piemēram: /vards MansJaunaisVards'
+          : this.uzstadiVaardu(saturs)
+        break
+      case '/es':
+        return saturs.length < 1
+          ? 'Norādi savu garastavokli: /es priecīgs, noņemt garastāvokli: /es- '
+          : this.pierakstitGarastavokli(saturs)
+      case '/izcelts':
+        return saturs.length < 1
+          ? 'Norādi izceļamo tekstu, piemēram: /izcelts ziņa'
+          : `**${saturs.replace('/izcelts ','')}**`
+        break;
+      case '/pazinojums':
+        return saturs.length < 1
+          ? 'Norādi paziņojuma tekstu, piemēram: /pazinojums ziņa'
+          : `!${saturs.replace('/pazinojums ','')}!`
+        break;
+      case '/pupas':
+        return this.uzstaditPupinu();
+        break;
+      case '/versija':
+      case '/v':
+        return `Javascript versija: ${VERSIJA}`
+        break;
+      case '/paliigaa':
+      case '/paliga':
+      case '/help':
+      case '/?':
+      default:
+        return this.paradiPalidzibu()
+        break
     }
   }
-  fetch('/garastavoklis/pierakstit_grarastavokli', parameters)
-  .then(res => res.json())
- .then((data) => {
-    console.log('Success:', data)
-  })
-  .catch((error) => {
-    console.error('Error:', error)
-  })
-  lasiGarastavokli()
- 
-  return ` *${gStavoklis}*`
-}
 
-function paradiPalidzibu() {
-  return 'Pieejamās komandas : "/vards JaunaisVards", "/palidziba", "/versija", "/es", "/pupas", "/joks", "/izcelts", "/pazinojums"'
-}
-// Ērtības funkcionalitāte
-var versijasLauks = document.getElementById("versija");
-versijasLauks.innerHTML = "JS versija: " + VERSIJA;
-// Atrod ievades lauku
-var ievadesLauks = document.getElementById("zinja");
-document.addEventListener("keydown", function(event) {
-  if (event.keyCode === 38 && ieraksts < komandas.length) {
-    ieraksts += 1 
-    document.getElementById("zinja").value = komandas[ieraksts-1]
-  }
-  if (event.keyCode === 40 && ieraksts > 1) {
-    ieraksts -= 1 
-    document.getElementById("zinja").value = komandas[ieraksts-1]
-  }
-  })
-// Gaida signālu no klaviatūras, ka ir nospiests Enter taustiņš
-ievadesLauks.addEventListener("keyup", function(event) {
-  // Numur 13 ir "Enter" taustiņš
-  if (event.keyCode === 13) {
-    suutiZinju();
-  }
-});
+  suutiZinju = () => {
+    let zinjasElements = document.getElementById('zinja')
+    let zinja = zinjasElements.value
+    zinjasElements.value = ''
+    komandas.push(zinja)
+    if (zinja.length < 1) {
+      console.log('Tukšu ziņu nesūtām uz serveri')
+      return
+    }
 
-function skanaJaNe(){
-  let soundbtn = document.getElementById("soundbtn")
-  let statuss = soundbtn.value == 'up' ? 'off' : 'up'
-  soundbtn.value = statuss
-  document.getElementById("ikona").className = `fa fa-volume-${statuss}`
-}
+    if (zinja.startsWith('/')) zinja = this.saprotiKomandu(zinja)
+    
+    const rinda = new Zinja(vards, zinja, null, pupinu)
+    const parameters = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 'chats': rinda })
+    }
 
-function skanja() {
-  if (soundbtn.value == "up") new Audio('static/sounds/water_droplet.mp3').play()
+    this.vaiSkanjaIeslegta() && this.atskanjoSkanju()
+    fetch('/chats/suuti', parameters)
+      .then(r => r.json())
+      .then(d => this.pievienotZinjas(d.chats))
+      .catch(e => console.error('Error:', e))
+  }
+
+  pierakstitGarastavokli = (garastavoklis) => {
+    const parameters = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // ja atslēga un vērtība sakrīt, tad var šādi
+      body: JSON.stringify({ vards, garastavoklis })
+      // tas pats, kas JSON.stringify({ vards: vards, garastavoklis: garastavoklis })
+    }
+
+    fetch('/garastavoklis/pierakstit_grarastavokli', parameters)
+      .then(r => r.json())
+      .then(d => this.pievienotGarastavokljus(d.mood))
+      .catch(e => console.error('Error:', e))
+      
+    return `${vards} nomainīja garastāvokli uz: ${garastavoklis}`
+  }
+
+  async lasiChatu() {
+    const atbilde = await fetch('/chats/lasi')
+    const { chats, mood } = await atbilde.json()
+    this.pievienotZinjas(chats)
+    this.pievienotGarastavokljus(mood)
+    this.raadiChataRindas()
+    await new Promise(resolve => setTimeout(resolve, ATJAUNOT))
+    await this.lasiChatu()
+  }
 }

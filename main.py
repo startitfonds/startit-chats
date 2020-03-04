@@ -13,23 +13,19 @@ def health_check():
 
 @app.route('/chats/lasi')
 def ielasit_chatu():
-  return chats.lasi()
+  return jsonify({ "chats": chats.lasi(), "mood": garastavoklis.lasi_garastavokli() })
 
 @app.route('/chats/suuti', methods=['POST'])
 def suutiit_zinju():
   dati = request.json
   chats.pieraksti_zinju(dati)
-  return chats.lasi()
-  
-@app.route('/garastavoklis/lasit_garastavokli')
-def sanjemt_garastavokli():
-  return garastavoklis.lasi_garastavokli() 
+  return jsonify({ "chats":chats.lasi() })
 
 @app.route('/garastavoklis/pierakstit_grarastavokli', methods=['POST'])
 def pierakstit_garastavokli():
   gStavoklis = request.json
   garastavoklis.pieraksti_garastavokli(gStavoklis)
-  return garastavoklis.lasi_garastavokli()
+  return jsonify({ "mood" :garastavoklis.lasi_garastavokli() })
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support

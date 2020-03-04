@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>StartIT chats</title>
@@ -11,12 +10,12 @@
     <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon" type="image/x-icon" />
     <script src="{{ url_for('static', filename='helpers.js') }}"></script>
     <script src="{{ url_for('static', filename='chuck.js') }}"></script>
-</head>
-
-<body onload="lasiChatu();" class="body">
+    <script src="{{ url_for('static', filename='chats.js') }}"></script>
+    <script src="{{ url_for('static', filename='zinja.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body class="body">
     {% block saturs %}
     {% endblock %}
-    <script src="{{ url_for('static', filename='chats.js') }}"></script>
-</body>
-
+  </body>
 </html>

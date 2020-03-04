@@ -9,7 +9,7 @@ def lasi():
     with open(LOGFAILS, "r", encoding="utf-8") as f:
         for rinda in f:
             chata_rindas.append(json.loads(rinda))
-    return jsonify({"chats": chata_rindas})
+    return chata_rindas
 
 
 def pieraksti_zinju(dati):
